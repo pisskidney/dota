@@ -1,4 +1,4 @@
-from cranky import views
+from ebets import views
 from django.conf.urls import patterns, url
 from django.views.decorators.csrf import csrf_exempt
 
