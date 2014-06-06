@@ -4,14 +4,14 @@ from ebets.models import Player, Match, Team, Event
 
 class PlayerAdmin(admin.ModelAdmin):
     fields = ('nickname', 'team', 'first_name', 'last_name',
-              'pic', 'description')
+              'pic', 'pic_pattern', 'description')
 
 
 admin.site.register(Player, PlayerAdmin)
 
 
 class TeamAdmin(admin.ModelAdmin):
-    fields = ('name', 'description', 'logo')
+    fields = ('name', 'description', 'logo', 'logo_pattern')
 
 
 admin.site.register(Team, TeamAdmin)
