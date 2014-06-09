@@ -33,6 +33,16 @@ DATABASES = {
 
 TEMPLATE_DEBUG = True
 
+TEMPLATE_DIRS = (
+    # Put strings here,
+    # like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(os.path.dirname(
+        os.path.realpath(__file__)), 'ebets', 'templates'
+    ),
+)
+
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -79,4 +89,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
+# Example: "http://example.com/static/", "http://static.example.com/"
 STATIC_URL = '/static/'
+
+# Additional locations of static files
+dirr = os.path.dirname
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(dirr(dirr(dirr(os.path.realpath(__file__)))), 'static'),
+)

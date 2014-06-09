@@ -5,4 +5,4 @@ from django.views.generic.base import View
 
 class SearchView(View):
     def get(self, request):
-        return HttpResponse('Hello, World!', status=200)
+        return render(request, 'index.html')
