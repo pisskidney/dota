@@ -1,4 +1,31 @@
-from django.models import AbstractBaseUser, BaseUserManager
+from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+
+
+class EbetsUserManager(BaseUserManager):
+    def create_user(self, identifier, password=False, short_name=None,
+                    full_name=None, last_logoff=None, profile_url=None,
+                    avatar=None, avatar_medium=None, avatar_full=None,
+                    time_created=None):
+        return self.model.create(
+            identifier, password, short_name,
+            full_name, last_logoff, profile_url,
+            avatar, avatar_medium, avatar_full,
+            time_created, commit=True
+        )
+
+    def create_superuser(self, identifier, short_name, password):
+        superuser = self.model(
+            identifier=identifier,
+            short_name=short_name,
+            is_staff=True,
+            is_verified=True,
+            is_superuser=True
+        )
+
+        superuser.set_password(password)
+        superuser.save()
+        return superuser
 
 
 class EbetsUser(AbstractBaseUser):
@@ -46,29 +73,3 @@ class EbetsUser(AbstractBaseUser):
         if commit:
             user.save()
         return user
-
-
-class EbetsUserManager(BaseUserManager):
-    def create_user(self, identifier, password=False, short_name=None,
-                    full_name=None, last_logoff=None, profile_url=None,
-                    avatar=None, avatar_medium=None, avatar_full=None,
-                    time_created=None):
-        return self.model.create(
-            identifier, password, short_name,
-            full_name, last_logoff, profile_url,
-            avatar, avatar_medium, avatar_full,
-            time_created, commit=True
-        )
-
-    def create_superuser(self, identifier, short_name, password):
-        superuser = self.model(
-            identifier=identifier,
-            short_name=short_name,
-            is_staff=True,
-            is_verified=True,
-            is_superuser=True
-        )
-
-        superuser.set_password(password)
-        superuser.save()
-        return superuser
