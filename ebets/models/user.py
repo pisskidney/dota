@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import (
+    AbstractBaseUser, BaseUserManager, PermissionsMixin)
 
 
 class EbetsUserManager(BaseUserManager):
@@ -19,7 +20,6 @@ class EbetsUserManager(BaseUserManager):
             identifier=identifier,
             short_name=short_name,
             is_staff=True,
-            is_verified=True,
             is_superuser=True
         )
 
@@ -28,7 +28,7 @@ class EbetsUserManager(BaseUserManager):
         return superuser
 
 
-class EbetsUser(AbstractBaseUser):
+class EbetsUser(AbstractBaseUser, PermissionsMixin):
     identifier = models.CharField(max_length=32, unique=True)
     short_name = models.CharField(max_length=255, null=True)
     full_name = models.CharField(max_length=255, null=True)
@@ -39,11 +39,16 @@ class EbetsUser(AbstractBaseUser):
     avatar_full = models.URLField(max_length=255, null=True)
     time_created = models.DateField(null=True)
 
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
     #A list of the field names that will be prompted for when creating a user
     #via the createsuperuser management command.
     REQUIRED_FIELDS = ['short_name']
 
     USERNAME_FIELD = 'identifier'
+
+    objects = EbetsUserManager()
 
     def get_full_name(self):
         return self.full_name
@@ -73,3 +78,6 @@ class EbetsUser(AbstractBaseUser):
         if commit:
             user.save()
         return user
+
+    class Meta:
+        app_label = 'ebets'
