@@ -101,3 +101,7 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(dirr(dirr(dirr(os.path.realpath(__file__)))), 'static'),
 )
+
+STEAM_API_KEY = environ['STEAM_API_KEY']
+STEAM_API_KEY_PATTERN = \
+'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={1}&steamids={2}'
