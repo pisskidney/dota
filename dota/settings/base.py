@@ -104,4 +104,5 @@ STATICFILES_DIRS = (
 
 STEAM_API_KEY = environ['STEAM_API_KEY']
 STEAM_API_KEY_PATTERN = \
-'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={1}&steamids={2}'
+'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=' + \
+STEAM_API_KEY + '&steamids={1}'
