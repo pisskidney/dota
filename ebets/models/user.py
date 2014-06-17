@@ -19,7 +19,7 @@ class EbetsUserManager(BaseUserManager):
         superuser = self.model(
             identifier=identifier,
             short_name=short_name,
-            is_staff=True,
+            is_admin=True,
             is_superuser=True
         )
 
@@ -39,7 +39,7 @@ class EbetsUser(AbstractBaseUser, PermissionsMixin):
     avatar_full = models.URLField(max_length=255, null=True)
     time_created = models.DateField(null=True)
 
-    is_staff = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
     #A list of the field names that will be prompted for when creating a user
@@ -54,7 +54,7 @@ class EbetsUser(AbstractBaseUser, PermissionsMixin):
         return self.full_name
 
     def get_short_name(self):
-        return self.first_name
+        return self.short_name
 
     @classmethod
     def create(cls, identifier, password=None, short_name=None,
@@ -78,6 +78,28 @@ class EbetsUser(AbstractBaseUser, PermissionsMixin):
         if commit:
             user.save()
         return user
+
+    @classmethod
+    def update_steam_info(cls, identifier, password=None,
+                          short_name=None, full_name=None, last_logoff=None,
+                          profile_url=None, avatar=None, avatar_medium=None,
+                          avatar_full=None, time_created=None, commit=True):
+        user = cls.objects.get(identifier=identifier)
+        user.password = password
+        user.short_name = short_name
+        user.full_name = full_name
+        user.last_logoff = last_logoff
+        user.profile_url = profile_url
+        user.avatar = avatar
+        user.avatar_medium = avatar_medium
+        user.avatar_full = avatar_full
+        user.time_created = time_created
+        if commit is True:
+            user.save()
+
+    @property
+    def is_staff(self):
+        return self.is_admin
 
     class Meta:
         app_label = 'ebets'
