@@ -79,23 +79,15 @@ class EbetsUser(AbstractBaseUser, PermissionsMixin):
             user.save()
         return user
 
-    @classmethod
-    def update_steam_info(cls, identifier, password=None,
-                          short_name=None, full_name=None, last_logoff=None,
-                          profile_url=None, avatar=None, avatar_medium=None,
-                          avatar_full=None, time_created=None, commit=True):
-        user = cls.objects.get(identifier=identifier)
-        user.password = password
-        user.short_name = short_name
-        user.full_name = full_name
-        user.last_logoff = last_logoff
-        user.profile_url = profile_url
-        user.avatar = avatar
-        user.avatar_medium = avatar_medium
-        user.avatar_full = avatar_full
-        user.time_created = time_created
-        if commit is True:
-            user.save()
+    def update_from_steam_data(self, info_dict):
+        self.full_name = info_dict.pop('realname')
+        self.short_name = info_dict.pop('personname')
+        self.avatar_medium = info_dict.pop('avatarmedium')
+        self.avatar_full = info_dict.pop('avatarfull')
+        self.last_logoff = info_dict.pop('lastlogoff')
+        self.time_created = info_dict.pop('timecreated')
+        self.profile_url = info_dict.pop('profileurl')
+        self.save()
 
     @property
     def is_staff(self):
