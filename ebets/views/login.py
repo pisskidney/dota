@@ -32,7 +32,7 @@ class LoginView(View):
 
         #Get the profile info
         response = urllib2.urlopen(steam_profile_url)
-        info = json.loads(resonse.read())['response']['players'][0]
+        info = json.loads(response.read())['response']['players'][0]
 
         user, _ = User.objects.get_or_create(identifier=steam_id)
         user.update_from_steam_data(info)
