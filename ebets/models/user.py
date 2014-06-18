@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin)
@@ -30,14 +31,14 @@ class EbetsUserManager(BaseUserManager):
 
 class EbetsUser(AbstractBaseUser, PermissionsMixin):
     identifier = models.CharField(max_length=32, unique=True)
-    short_name = models.CharField(max_length=255, null=True)
-    full_name = models.CharField(max_length=255, null=True)
-    last_logoff = models.DateField(null=True)
-    profile_url = models.URLField(max_length=255, null=True)
-    avatar = models.URLField(max_length=255, null=True)
-    avatar_medium = models.URLField(max_length=255, null=True)
-    avatar_full = models.URLField(max_length=255, null=True)
-    time_created = models.DateField(null=True)
+    short_name = models.CharField(max_length=255, null=True, blank=True)
+    full_name = models.CharField(max_length=255, null=True, blank=True)
+    last_logoff = models.DateTimeField(null=True, blank=True)
+    profile_url = models.URLField(max_length=255, null=True, blank=True)
+    avatar = models.URLField(max_length=255, null=True, blank=True)
+    avatar_medium = models.URLField(max_length=255, null=True, blank=True)
+    avatar_full = models.URLField(max_length=255, null=True, blank=True)
+    time_created = models.DateTimeField(null=True, blank=True)
 
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -81,11 +82,15 @@ class EbetsUser(AbstractBaseUser, PermissionsMixin):
 
     def update_from_steam_data(self, info_dict):
         self.full_name = info_dict.pop('realname')
-        self.short_name = info_dict.pop('personname')
+        self.short_name = info_dict.pop('personaname')
         self.avatar_medium = info_dict.pop('avatarmedium')
         self.avatar_full = info_dict.pop('avatarfull')
-        self.last_logoff = info_dict.pop('lastlogoff')
-        self.time_created = info_dict.pop('timecreated')
+        self.last_logoff = datetime.datetime.fromtimestamp(
+            info_dict.pop('lastlogoff')
+        )
+        self.time_created = datetime.datetime.fromtimestamp(
+            info_dict.pop('timecreated')
+        )
         self.profile_url = info_dict.pop('profileurl')
         self.save()
 
