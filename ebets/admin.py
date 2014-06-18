@@ -59,12 +59,16 @@ class UserAdmin(DefaultUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('identifier',)
+    list_display = ('short_name', 'full_name', 'identifier', 'is_admin')
     list_filter = ('is_admin',)
 
     fieldsets = (
-        (None, {'fields': ('identifier',)}),
-        ('pers', {'fields': ('short_name',)}),
+        (None, {'fields': ('identifier', 'password')}),
+        ('Personal info', {'fields': (
+            'short_name', 'full_name', 'profile_url', 'avatar_full',
+            'time_created', 'last_logoff'
+        )}),
+        ('Permissions', {'fields': ('is_admin',)}),
     )
 
     add_fieldsets = (
