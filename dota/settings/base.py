@@ -28,6 +28,10 @@ DATABASES = {
 }
 
 AUTH_USER_MODEL = 'ebets.EbetsUser'
+AUTHENTICATION_BACKENDS = (
+    'ebets.models.user.EbetsAuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend'
+)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
