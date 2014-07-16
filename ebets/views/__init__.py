@@ -1,2 +1,2 @@
 from .search import SearchView
-from .login import LoginView
+from .login import LoginView, LogoutView

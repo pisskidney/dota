@@ -5,7 +5,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic.base import View
-from django.contrib.auth import get_user_model, login, authenticate
+from django.contrib.auth import get_user_model, login, authenticate, logout
 
 from .search import SearchView
 
@@ -40,4 +40,11 @@ class LoginView(View):
         user = authenticate(identifier=user.identifier)
         login(request, user)
 
-        return redirect('search')
+        return redirect('home')
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('home')
+

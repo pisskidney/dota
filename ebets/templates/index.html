@@ -38,6 +38,7 @@
           <a class="navbar-brand" href="#">ebets</a>
         </div>
         <div class="navbar-collapse collapse">
+        {% if not user.is_authenticated %}
           <form class="navbar-form navbar-right" role="form" action="https://steamcommunity.com/openid/login" method="post">
               <input type="hidden" name="openid.ns" value="http://specs.openid.net/auth/2.0" />
               <input type="hidden" name="openid.mode" value="checkid_setup" />
@@ -47,6 +48,11 @@
               <input type="hidden" name="openid.return_to" value="http://pisskidney.com:8080/login" />
               <input type="image" src="{% static 'imgs/sits_small.png' %}" alt="Sign in" />
           </form>
+        {% else %}
+        <p>Hello {{ user.short_name }}</p>
+        <img src="{{ user.avatar_medium }}" />
+        <a href="{% url 'logout' %}">logout</a>
+        {% endif %}
         </div><!--/.navbar-collapse -->
       </div>
     </div>
