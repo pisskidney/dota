@@ -4,6 +4,20 @@ from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin)
 
 
+class EbetsAuthenticationBackend(object):
+    def authenticate(self, identifier=None):
+        try:
+            return EbetsUser.objects.get(identifier=identifier)
+        except EbetsUser.DoesNotExist:
+            return None
+
+    def get_user(self, identifier):
+        try:
+            return EbetsUser.objects.get(pk=identifier)
+        except EbetsUser.DoesNotExist:
+            return None
+
+
 class EbetsUserManager(BaseUserManager):
     def create_user(self, identifier, password=False, short_name=None,
                     full_name=None, last_logoff=None, profile_url=None,

@@ -5,7 +5,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic.base import View
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login, authenticate
 
 from .search import SearchView
 
@@ -36,5 +36,8 @@ class LoginView(View):
 
         user, _ = User.objects.get_or_create(identifier=steam_id)
         user.update_from_steam_data(info)
+
+        user = authenticate(identifier=user.identifier)
+        login(request, user)
 
         return redirect('search')
